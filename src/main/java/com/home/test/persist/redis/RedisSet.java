@@ -1,12 +1,13 @@
 package com.home.test.persist.redis;
 
 import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-public class RedisListJava {
+public class RedisSet {
     public static void main(String[] args) {
 
         //Connecting to Redis server on localhost
@@ -15,14 +16,15 @@ public class RedisListJava {
         System.out.println("Connection to server sucessfully");
 
         //store data in redis list
-        jedis.lpush("tutorial-list", "Redis");
-        jedis.lpush("tutorial-list", "Mongodb");
-        jedis.lpush("tutorial-list", "Mysql");
+        jedis.sadd("fruits", "apple");
+        jedis.sadd("fruits", "orange");
+        jedis.sadd("fruits", "apricot");
         // Get the stored data and print it
-        List<String> list = jedis.lrange("tutorial-list", 0 ,5);
+        Set<String> fruits  = jedis.smembers("fruits");
 
-        for(int i = 0; i<list.size(); i++) {
-            System.out.println("Stored string in redis:: "+list.get(i));
+        Iterator<String> iterator = fruits.iterator();
+        while (iterator.hasNext()) {
+            System.out.println("Next fruit: " + iterator.next());
         }
     }
 }

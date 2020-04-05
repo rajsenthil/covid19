@@ -11,7 +11,7 @@ public class RedisKeyJava {
 
         //Connecting to Redis server on localhost
 //        Jedis jedis = new Jedis("172.17.0.4");
-        JedisCluster jedis = new JedisCluster(new HostAndPort("172.17.0.4",6379));
+        JedisCluster jedis = new JedisCluster(new HostAndPort(AppConfig.getClusterIp(),6379));
         System.out.println("Connection to server sucessfully");
         //store data in redis keys
         // Get the stored data and print it
