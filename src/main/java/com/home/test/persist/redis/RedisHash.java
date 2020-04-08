@@ -1,7 +1,6 @@
 package com.home.test.persist.redis;
 
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.*;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -12,7 +11,10 @@ public class RedisHash {
 
         //Connecting to Redis server on localhost
 //        Jedis jedis = new Jedis("172.17.0.4", 6379);
-        JedisCluster jedis = new JedisCluster(new HostAndPort(AppConfig.getClusterIp(), 6379));
+        JedisPool pool = new JedisPool(new JedisPoolConfig(), AppConfig.getClusterIp());
+        Jedis jedis = pool.getResource();
+        jedis.auth("password");
+
         System.out.println("Connection to server sucessfully");
 
         jedis.hset("user#1", "name", "peter");

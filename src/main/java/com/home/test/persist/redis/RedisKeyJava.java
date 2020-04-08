@@ -11,7 +11,10 @@ public class RedisKeyJava {
 
         //Connecting to Redis server on localhost
 //        Jedis jedis = new Jedis("172.17.0.4");
-        JedisCluster jedis = new JedisCluster(new HostAndPort(AppConfig.getClusterIp(),6379));
+        JedisPool pool = new JedisPool(new JedisPoolConfig(), AppConfig.getClusterIp());
+        Jedis jedis = pool.getResource();
+        jedis.auth("password");
+
         System.out.println("Connection to server sucessfully");
         //store data in redis keys
         // Get the stored data and print it
@@ -25,23 +28,6 @@ public class RedisKeyJava {
             System.out.println("List of stored keys:: "+iterator.next());
         }
 
-        testRedis(jedis);
     }
 
-    public static void testRedis(JedisCluster cluster) {
-        ScanParams scanParams = new ScanParams().count(1000);
-        Set<String> allKeys = new HashSet<>();
-        cluster.getClusterNodes().values().forEach((pool) -> {
-            String cur = ScanParams.SCAN_POINTER_START;
-            do {
-                try (Jedis jedis = pool.getResource()) {
-                    ScanResult<String> scanResult = jedis.scan(cur, scanParams);
-                    allKeys.addAll(scanResult.getResult());
-//                    cur = scanResult.getStringCursor();
-                    cur = scanResult.getCursor();
-                }
-            } while (!cur.equals(ScanParams.SCAN_POINTER_START));
-        });
-        allKeys.stream().forEach(System.out::println);
-    }
 }

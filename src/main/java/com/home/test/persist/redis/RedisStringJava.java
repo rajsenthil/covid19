@@ -1,14 +1,15 @@
 package com.home.test.persist.redis;
 
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.*;
 
 public class RedisStringJava {
     public static void main(String[] args) {
         //Connecting to Redis server on localhost
 //        Jedis jedis = new Jedis("10.107.43.112");
-        JedisCluster jedis = new JedisCluster(new HostAndPort(AppConfig.getClusterIp(), 6379));
+        JedisPool pool = new JedisPool(new JedisPoolConfig(), AppConfig.getClusterIp());
+        Jedis jedis = pool.getResource();
+        jedis.auth("password");
+
         System.out.println("Connection to server sucessfully");
         //set the data in redis string
         jedis.set("tutorial-name", "Redis tutorial");

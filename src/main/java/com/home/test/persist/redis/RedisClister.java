@@ -10,7 +10,8 @@ import java.util.Map;
 
 public class RedisClister {
     public static void main(String[] args) {
-        JedisCluster jedisCluster = new JedisCluster(new HostAndPort(AppConfig.getClusterIp(), 6379));
+//        JedisCluster jedisCluster = new JedisCluster(new HostAndPort(AppConfig.getClusterIp(), 6379));
+        JedisCluster jedisCluster = new JedisCluster(new HostAndPort(AppConfig.getClusterIp(), 6379), 10, 10, 2, "password", null);
         System.out.println("Connection to server sucessfully");
 
         for (Map.Entry<String, JedisPool> node : jedisCluster.getClusterNodes().entrySet()) {
